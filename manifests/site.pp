@@ -19,11 +19,11 @@ define gitrepo($url) {
 class android_ndk_install($ndk_version) {
   exec {
     "download-android-ndk":
-      command => "/usr/bin/wget http://dl.google.com/android/ndk/android-ndk-$ndk_version-linux-x86_64.tar.bz2",
+      command => "/usr/bin/wget https://dl.google.com/android/repository/android-ndk-$ndk_version-linux.zip",
       cwd => "/home/admin/droid",
-      creates => "/home/admin/droid/android-ndk-$ndk_version-linux-x86_64.tar.bz2";
+      creates => "/home/admin/droid/android-ndk-$ndk_version-linux.zip";
     "extract-android-ndk":
-      command => "/bin/tar jxf /home/admin/droid/android-ndk-$ndk_version-linux-x86_64.tar.bz2",
+      command => "/bin/unzip android-ndk-$ndk_version-linux.zip",
       cwd => "/home/admin/droid",
       creates => "/home/admin/droid/android-ndk-$ndk_version",
       require => Exec["download-android-ndk"];
@@ -72,7 +72,7 @@ class android_ndk_symlinks($gcc_version) {
 
 class android_ndk {
   # settings - NDK version and gcc version
-  $ndk_version = "r9d"
+  $ndk_version = "r27d"
   $gcc_version = "4.6"
 
   class {
