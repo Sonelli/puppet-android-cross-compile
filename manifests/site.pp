@@ -1,4 +1,4 @@
-define puppetfile($mode = 0644, $owner = "root", $group = "root") {
+define puppetfile($mode = "0644", $owner = "root", $group = "root") {
   file {
     $title:
       source => "/var/lib/puppet/files/$title",
