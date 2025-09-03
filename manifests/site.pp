@@ -100,7 +100,7 @@ class admin_user {
   }
   puppetfile {
     "/home/admin/shell":
-      mode => 0755;
+      mode => "0755";
   }
 }
 
