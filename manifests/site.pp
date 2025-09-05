@@ -35,53 +35,14 @@ class android_ndk_install($ndk_version) {
   }
 }
 
-class android_ndk_symlinks($gcc_version) {
-  file {
-    "/home/admin/droid/android-ndk/default-arm-toolchain":
-      ensure => "toolchains/arm-linux-androideabi-$gcc_version/prebuilt/linux-x86_64/",
-      require => File["/home/admin/droid/android-ndk"];
-    "/home/admin/droid/lib-arm/libgcc.a":
-      ensure => "../android-ndk/default-arm-toolchain/lib/gcc/arm-linux-androideabi/$gcc_version/libgcc.a",
-      require => File["/home/admin/droid/android-ndk/default-arm-toolchain"];
-    "/home/admin/droid/lib-arm/libstdc++":
-      ensure => "../android-ndk/sources/cxx-stl/gnu-libstdc++/$gcc_version/",
-      require => File["/home/admin/droid/android-ndk/default-arm-toolchain"];
-
-    "/home/admin/droid/android-ndk/default-x86-toolchain":
-      ensure => "toolchains/x86-$gcc_version/prebuilt/linux-x86_64/",
-      require => File["/home/admin/droid/android-ndk"];
-    "/home/admin/droid/lib-x86/libgcc.a":
-      ensure => "../android-ndk/default-x86-toolchain/lib/gcc/i686-linux-android/$gcc_version/libgcc.a",
-      require => File["/home/admin/droid/android-ndk/default-x86-toolchain"];
-    "/home/admin/droid/lib-x86/libstdc++":
-      ensure => "../android-ndk/sources/cxx-stl/gnu-libstdc++/$gcc_version/",
-      require => File["/home/admin/droid/android-ndk/default-x86-toolchain"];
-
-
-    "/home/admin/droid/android-ndk/default-mips-toolchain":
-      ensure => "toolchains/mipsel-linux-android-$gcc_version/prebuilt/linux-x86_64/",
-      require => File["/home/admin/droid/android-ndk"];
-    "/home/admin/droid/lib-mips/libgcc.a":
-      ensure => "../android-ndk/default-mips-toolchain/lib/gcc/mipsel-linux-android/$gcc_version/libgcc.a",
-      require => File["/home/admin/droid/android-ndk/default-mips-toolchain"];
-    "/home/admin/droid/lib-mips/libstdc++":
-      ensure => "../android-ndk/sources/cxx-stl/gnu-libstdc++/$gcc_version/",
-      require => File["/home/admin/droid/android-ndk/default-mips-toolchain"];
-  }
-}
-
 class android_ndk {
-  # settings - NDK version and gcc version
+  # settings - NDK version
   $ndk_version = "r27d"
-  $gcc_version = "4.6"
 
   class {
-    "android_ndk_install": 
+    "android_ndk_install":
       ndk_version => $ndk_version,
       require => Class["admin_user"];
-    "android_ndk_symlinks": 
-      gcc_version => $gcc_version,
-      require => Class["android_ndk_install"];
   }
 
 }
@@ -95,7 +56,6 @@ class admin_user {
     "/home/admin/droid": ensure => directory, require => File["/home/admin"];
     "/home/admin/droid/lib-arm": ensure => directory, require => File["/home/admin/droid"];
     "/home/admin/droid/lib-x86": ensure => directory, require => File["/home/admin/droid"];
-    "/home/admin/droid/lib-mips": ensure => directory, require => File["/home/admin/droid"];
     "/home/admin/tmp": ensure => directory, require => File["/home/admin"];
   }
   puppetfile {
@@ -118,6 +78,7 @@ node default {
     "automake": ensure => present;
     "mercurial": ensure => present;
     "file": ensure => present;
+    "clang": ensure => present;
   }
 
   include admin_user
